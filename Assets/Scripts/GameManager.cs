@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Data;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -16,8 +15,6 @@ public class GameManager : MonoBehaviour
     public void UpdatePoints()
     {
         score += 1;
-        //Aviso al UI Manager? (implementable cuando veamos UI
+        //Aviso al UI Manager? (implementable cuando veamos UI)
     }
-
-
 }
