@@ -4,8 +4,6 @@ public class BallSpawner : MonoBehaviour
 {
     [SerializeField] GameObject ballPrefab;
 
-    private void Start() { SpawnBall(); }
-
     public BallController SpawnBall()
     {
         GameObject obj = Instantiate(ballPrefab, transform.position, Quaternion.identity);
