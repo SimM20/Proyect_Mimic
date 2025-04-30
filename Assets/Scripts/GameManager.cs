@@ -20,7 +20,13 @@ public class GameManager : MonoBehaviour
         actualBall.OnOutOfBounds += OnDefeat;
     }
 
-    public void OnDefeat() { /*Aca iria todo lo que tiene que ver con la derrota en si*/ actualBall.OnOutOfBounds -= OnDefeat; SceneManagerUtils.LoadActiveScene(); }
+    public void OnDefeat() 
+    { 
+        /*Aca iria todo lo que tiene que ver con la derrota en si*/ 
+        actualBall.OnOutOfBounds -= OnDefeat;
+        SaveSystem.SaveScore(score);
+        SceneManagerUtils.LoadActiveScene(); 
+    }
 
     public void UpdatePoints()
     {
