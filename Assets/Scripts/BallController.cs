@@ -10,10 +10,12 @@ public class BallController : MonoBehaviour
 
     private Rigidbody2D rb;
     private float currentSpeed;
+    private AudioSource audioSource;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        audioSource = GetComponent<AudioSource>();
         currentSpeed = data.initialSpeed;
 
         Vector2 direction = new Vector2(Random.Range(-1, 1), -1).normalized;
@@ -34,6 +36,8 @@ public class BallController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        audioSource.pitch = Random.Range(0.95f, 1.05f);
+        audioSource.Play();
         IScorable scorable = collision.gameObject.GetComponent<IScorable>();
         if (scorable != null)
         {

@@ -1,5 +1,4 @@
 using System;
-using System.Net.Sockets;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -10,7 +9,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject ballSpawner;
     [SerializeField] private GameObject loadCanvasPrefab;
     private BallController actualBall;
-    private int score = 0;
+    public int score { get; private set; } = 0;
     private int highScore = 0;
     private void Awake()
     {
@@ -31,8 +30,7 @@ public class GameManager : MonoBehaviour
     }
 
     public void OnDefeat() 
-    { 
-        /*Aca iria todo lo que tiene que ver con la derrota en si*/ 
+    {
         actualBall.OnOutOfBounds -= OnDefeat;
         SaveScoreAsync();
         SceneManagementUtils.AsyncLoadSceneByName("MainMenu", loadCanvasPrefab, this);
