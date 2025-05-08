@@ -5,11 +5,31 @@ using Unity.Services.Authentication;
 using Unity.Services.CloudSave;
 using UnityEngine;
 using System.IO;
+using System;
 
 public static class SaveSystem
 {
     private static bool isInitialized = false;
-    private static string localPath = Application.persistentDataPath + "/savedata.json";
+    private static string localPath => Application.persistentDataPath + $"/{CurrentUsername}_savedata.json";
+    private static string _cachedUsername;
+
+    public static string CurrentUsername
+    {
+        get
+        {
+            if (string.IsNullOrEmpty(_cachedUsername))
+            {
+                _cachedUsername = PlayerPrefs.GetString("username", "default");
+            }
+            return _cachedUsername;
+        }
+        set
+        {
+            _cachedUsername = value;
+            PlayerPrefs.SetString("username", value);
+            PlayerPrefs.Save();
+        }
+    }
 
     public static async Task InitializeServicesAsync()
     {
@@ -20,11 +40,40 @@ public static class SaveSystem
             if (!AuthenticationService.Instance.IsSignedIn)
                 await AuthenticationService.Instance.SignInAnonymouslyAsync();
 
+            CurrentUsername = PlayerPrefs.GetString("username", "default");
             isInitialized = true;
         }
         catch (System.Exception ex)
         {
             Debug.LogError("Error inicializando Cloud Save: " + ex.Message);
+        }
+    }
+
+    public static async Task DeleteUserCloudData()
+    {
+        await InitializeServicesAsync();
+
+        var key = $"highScore_{CurrentUsername}";
+        var data = new Dictionary<string, object> { { key, null } };
+
+        try
+        {
+            await CloudSaveService.Instance.Data.Player.SaveAsync(data);
+            Debug.Log("Datos eliminados en la nube.");
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Error al eliminar datos de la nube: {ex.Message}");
+        }
+    }
+
+    public static void DeleteLocalData()
+    {
+        string localPath = Application.persistentDataPath + $"/{CurrentUsername}_savedata.json";
+        if (File.Exists(localPath))
+        {
+            File.Delete(localPath);
+            Debug.Log("Datos locales eliminados.");
         }
     }
 
@@ -39,9 +88,9 @@ public static class SaveSystem
             if (score > currentHighScore)
             {
                 var data = new Dictionary<string, object>
-                {
-                    { "highScore", score }
-                };
+            {
+                { $"highScore_{CurrentUsername}", score }
+            };
                 await CloudSaveService.Instance.Data.Player.SaveAsync(data);
             }
         }
@@ -68,10 +117,11 @@ public static class SaveSystem
 
     private static async Task<int> LoadHighScoreFromCloudAsync()
     {
-        var keys = new HashSet<string> { "highScore" };
+        var key = $"highScore_{CurrentUsername}";
+        var keys = new HashSet<string> { key };
         var data = await CloudSaveService.Instance.Data.Player.LoadAsync(keys);
 
-        if (data.TryGetValue("highScore", out var value))
+        if (data.TryGetValue(key, out var value))
             return value.Value.GetAs<int>();
 
         return 0;
@@ -85,7 +135,6 @@ public static class SaveSystem
             GameData data = new GameData { highScore = score };
             string json = JsonUtility.ToJson(data, true);
             File.WriteAllText(localPath, json);
-            Debug.Log("Guardado en local.");
         }
     }
 

@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
     {
         actualBall.OnOutOfBounds -= OnDefeat;
         SaveScoreAsync();
-        SceneManagementUtils.AsyncLoadSceneByName("MainMenu", loadCanvasPrefab, this);
+        SceneManagementUtils.AsyncLoadSceneByName("Input", loadCanvasPrefab, this);
     }
 
     private async void SaveScoreAsync() { await SaveSystem.SaveScoreAsync(score); }
