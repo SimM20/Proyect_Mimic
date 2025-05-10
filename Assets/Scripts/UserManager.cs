@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 using TMPro;
 
@@ -28,14 +27,8 @@ public class UserManager : MonoBehaviour
             PlayerPrefs.SetString("username", username);
             PlayerPrefs.Save();
             warningText.text = "Loged with: " + username;
-            StartCoroutine(LoadMenuWithDelay());
+            SceneManagementUtils.LoadSceneByName("MainMenu");
         }
         else warningText.text = "Username can't be empty";
-    }
-
-    private IEnumerator LoadMenuWithDelay() 
-    { 
-        yield return new WaitForSeconds(1.5f);
-        SceneManagementUtils.LoadSceneByName("MainMenu");
     }
 }
