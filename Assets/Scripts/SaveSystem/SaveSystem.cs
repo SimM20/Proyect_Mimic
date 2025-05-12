@@ -69,12 +69,8 @@ public static class SaveSystem
 
     public static void DeleteLocalData()
     {
-        string localPath = Application.persistentDataPath + $"/{CurrentUsername}_savedata.json";
         if (File.Exists(localPath))
-        {
             File.Delete(localPath);
-            Debug.Log("Datos locales eliminados.");
-        }
     }
 
     public static async Task SaveScoreAsync(int score)
@@ -144,10 +140,5 @@ public static class SaveSystem
         string json = File.ReadAllText(localPath);
         GameData data = JsonUtility.FromJson<GameData>(json);
         return data.highScore;
-    }
-
-    public static void DeleteLocal()
-    {
-        if (File.Exists(localPath)) File.Delete(localPath);
     }
 }

@@ -28,6 +28,7 @@ public class MainMenuManager : MonoBehaviour
 
     private async void LoadScore()
     {
+        await GetHighScore();
         int score = await GetHighScore();
         scoreText.text += "\n" + score.ToString();
         userText.text = SaveSystem.CurrentUsername;
