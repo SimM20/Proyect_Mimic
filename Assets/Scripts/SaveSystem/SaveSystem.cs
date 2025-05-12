@@ -43,7 +43,7 @@ public static class SaveSystem
             CurrentUsername = PlayerPrefs.GetString("username", "default");
             isInitialized = true;
         }
-        catch (System.Exception ex)
+        catch (Exception ex)
         {
             Debug.LogError("Error inicializando Cloud Save: " + ex.Message);
         }

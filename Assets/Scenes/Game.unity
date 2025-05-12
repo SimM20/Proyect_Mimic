@@ -1332,7 +1332,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bgMusic: {fileID: 834853336}
-  pitchIncrease: 0.02
+  pitchIncrease: 0
 --- !u!4 &1544025784
 Transform:
   m_ObjectHideFlags: 0
