@@ -40,10 +40,8 @@ public class MainMenuManager : MonoBehaviour
         return highScore;
     }
 
-    public async void DeleteUser()
+    public void DeleteUser()
     {
-        await SaveSystem.DeleteUserCloudData();
-
         SaveSystem.DeleteLocalData();
 
         PlayerPrefs.DeleteKey("username");

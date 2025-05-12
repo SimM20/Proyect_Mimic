@@ -49,24 +49,6 @@ public static class SaveSystem
         }
     }
 
-    public static async Task DeleteUserCloudData()
-    {
-        await InitializeServicesAsync();
-
-        var key = $"highScore_{CurrentUsername}";
-        var data = new Dictionary<string, object> { { key, null } };
-
-        try
-        {
-            await CloudSaveService.Instance.Data.Player.SaveAsync(data);
-            Debug.Log("Datos eliminados en la nube.");
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError($"Error al eliminar datos de la nube: {ex.Message}");
-        }
-    }
-
     public static void DeleteLocalData()
     {
         if (File.Exists(localPath))
@@ -76,12 +58,13 @@ public static class SaveSystem
     public static async Task SaveScoreAsync(int score)
     {
         SaveLocal(score);
+
         await InitializeServicesAsync();
 
         try
         {
-            int currentHighScore = await LoadHighScoreFromCloudAsync();
-            if (score > currentHighScore)
+            int cloudScore = await LoadHighScoreFromCloudAsync();
+            if (score > cloudScore)
             {
                 var data = new Dictionary<string, object>
             {
@@ -90,9 +73,17 @@ public static class SaveSystem
                 await CloudSaveService.Instance.Data.Player.SaveAsync(data);
             }
         }
-        catch (System.Exception ex)
+        catch (Exception ex)
         {
-            Debug.LogError("Error guardando en la nube: " + ex.Message);
+            int localScore = LoadLocal();
+            if (localScore > 0)
+            {
+                var data = new Dictionary<string, object>
+            {
+                { $"highScore_{CurrentUsername}", localScore }
+            };
+                await CloudSaveService.Instance.Data.Player.SaveAsync(data);
+            }
         }
     }
 
@@ -100,15 +91,8 @@ public static class SaveSystem
     {
         await InitializeServicesAsync();
 
-        try
-        {
-            return await LoadHighScoreFromCloudAsync();
-        }
-        catch
-        {
-            Debug.LogWarning("Fallo al cargar desde la nube, cargando local.");
-            return LoadLocal();
-        }
+        try { return await LoadHighScoreFromCloudAsync(); }
+        catch { return LoadLocal(); }
     }
 
     private static async Task<int> LoadHighScoreFromCloudAsync()

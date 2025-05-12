@@ -1,5 +1,8 @@
 using UnityEngine;
 using TMPro;
+using System.Collections.Generic;
+using System;
+using Unity.Services.CloudSave;
 
 public class UserManager : MonoBehaviour
 {
@@ -18,17 +21,43 @@ public class UserManager : MonoBehaviour
         }
     }
 
-    public void SendUser()
+    public async void SendUser()
     {
-        string username = inputField.text;
-        if (!string.IsNullOrEmpty(username))
+        string username = inputField.text.Trim();
+
+        if (string.IsNullOrEmpty(username))
         {
+            warningText.text = "Username can't be empty";
+            return;
+        }
+
+        await SaveSystem.InitializeServicesAsync();
+
+        string key = $"highScore_{username}";
+        var keys = new HashSet<string> { key };
+
+        try
+        {
+            var data = await CloudSaveService.Instance.Data.Player.LoadAsync(keys);
+            if (data.ContainsKey(key))
+            {
+                warningText.text = $"Usuario encontrado. Logeado como: {username}";
+            }
+            else
+            {
+                warningText.text = $"Nuevo usuario creado: {username}";
+            }
+
             SaveSystem.CurrentUsername = username;
             PlayerPrefs.SetString("username", username);
             PlayerPrefs.Save();
-            warningText.text = "Loged with: " + username;
+
             SceneManagementUtils.LoadSceneByName("MainMenu");
         }
-        else warningText.text = "Username can't be empty";
+        catch (Exception ex)
+        {
+            Debug.LogError($"Error verificando usuario en la nube: {ex.Message}");
+            warningText.text = "Error conectando con la nube";
+        }
     }
 }
