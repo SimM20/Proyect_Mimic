@@ -26,6 +26,8 @@ public class MainMenuManager : MonoBehaviour
 
     private void Start() { LoadScore(); }
 
+    private void OnEnable() { CheckConfig(); }
+
     private async void LoadScore()
     {
         await GetHighScore();
@@ -61,6 +63,19 @@ public class MainMenuManager : MonoBehaviour
     {
         isSFXOn = !isSFXOn;
         audiomixer.SetFloat("SFXVolume", isSFXOn ? 0f : -80f);
+        sfxSprite.sprite = isSFXOn ? onSound : offSound;
+    }
+
+    private void CheckConfig()
+    {
+        float musicVolume;
+        audiomixer.GetFloat("MusicVolume", out musicVolume);
+        isMusicOn = musicVolume > -79f;
+        musicSprite.sprite = isMusicOn ? onSound : offSound;
+
+        float sfxVolume;
+        audiomixer.GetFloat("SFXVolume", out sfxVolume);
+        isSFXOn = sfxVolume > -79f;
         sfxSprite.sprite = isSFXOn ? onSound : offSound;
     }
 

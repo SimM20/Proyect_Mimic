@@ -12,11 +12,11 @@ public class UserManager : MonoBehaviour
     private void Start()
     {
         string savedUsername = PlayerPrefs.GetString("username", "");
-        Debug.Log("Username desde PlayerPrefs al iniciar: " + savedUsername);
+        QualitySetter.Apply();
         if (!string.IsNullOrEmpty(savedUsername))
         {
             SaveSystem.CurrentUsername = savedUsername;
-            Debug.Log("Cargando usuario guardado: " + SaveSystem.CurrentUsername);
+            Debug.Log("Cargando usuario: " + SaveSystem.CurrentUsername);
             SceneManagementUtils.LoadSceneByName("MainMenu");
         }
     }
