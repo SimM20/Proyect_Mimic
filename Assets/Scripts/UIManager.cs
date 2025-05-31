@@ -16,7 +16,7 @@ public class UIManager : MonoBehaviour
         }
         else 
         {
-            scoreText.text = highScore.ToString();
+            scoreText.text = score.ToString() + "/" + highScore.ToString();
             scoreText.color = Color.red;
         }
     }

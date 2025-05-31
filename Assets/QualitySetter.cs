@@ -2,14 +2,9 @@ using UnityEngine;
 
 public static class QualitySetter
 {
-    public static void Apply()
-    {
-#if UNITY_ANDROID
-        SetQualityForAndroid();
-#endif
-    }
+    public static void Apply() { SetQuality(); }
 
-    private static void SetQualityForAndroid()
+    private static void SetQuality()
     {
         int ram = SystemInfo.systemMemorySize;
         int cores = SystemInfo.processorCount;
@@ -31,7 +26,5 @@ public static class QualitySetter
             QualitySettings.SetQualityLevel(3);
             Application.targetFrameRate = -1;
         }
-
-        Debug.Log($"AutoDetec -> RAM: {ram}MB | Cores: {cores} | QualityPreset: {QualitySettings.GetQualityLevel()}");
     }
 }
