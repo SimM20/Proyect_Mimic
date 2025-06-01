@@ -27,11 +27,13 @@ public class GameManager : MonoBehaviour
     {
         actualBall = ballSpawner.GetComponent<BallSpawner>().SpawnBall();
         actualBall.OnOutOfBounds += OnDefeat;
+        TopPaddle.OnHit += UpdatePoints;
     }
 
     public void OnDefeat() 
     {
         actualBall.OnOutOfBounds -= OnDefeat;
+        TopPaddle.OnHit -= UpdatePoints;
         SaveScoreAsync();
         SceneManagementUtils.AsyncLoadSceneByName("Input", loadCanvasPrefab, this);
     }

@@ -1,9 +1,10 @@
+using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] private PlayerData data;
     private float minX;
     private float maxX;
 
@@ -24,7 +25,20 @@ public class PlayerController : MonoBehaviour
         Vector3 leftEdge = Camera.main.ScreenToWorldPoint(new Vector3(Screen.safeArea.xMin, transform.position.y, Camera.main.nearClipPlane));
         Vector3 rightEdge = Camera.main.ScreenToWorldPoint(new Vector3(Screen.safeArea.xMax, transform.position.y, Camera.main.nearClipPlane));
 
-        minX = leftEdge.x + transform.localScale.y; ;
-        maxX = rightEdge.x - transform.localScale.y; ;
+        minX = leftEdge.x + transform.localScale.y;
+        maxX = rightEdge.x - transform.localScale.y;
+    }
+
+    public void ChangeLocalScale(float timeUntilChange) { StartCoroutine(RenueveScale(timeUntilChange)); }
+
+    private IEnumerator RenueveScale(float timeUntilChange)
+    {
+        transform.localScale = data.BigPlayerScale;
+        SetPosition();
+
+        yield return new WaitForSeconds(timeUntilChange);
+
+        transform.localScale = data.PlayerScale;
+        SetPosition();
     }
 }

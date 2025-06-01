@@ -7,6 +7,5 @@ public class AudioManager : MonoBehaviour
 
     private void Start() { GameManager.OnUpdatePoints += IncreasePitch; }
     private void IncreasePitch(int score, int highScore) { bgMusic.pitch = Mathf.Clamp(1f + score * pitchIncrease, 1f, 2f); }
-
     private void OnDisable() { GameManager.OnUpdatePoints -= IncreasePitch; }
 }

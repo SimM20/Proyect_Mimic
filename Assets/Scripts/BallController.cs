@@ -11,22 +11,23 @@ public class BallController : MonoBehaviour
     private Rigidbody2D rb;
     private float currentSpeed;
     private AudioSource audioSource;
+    private Vector3 screenBottom;
+    private Vector3 worldBottom;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         audioSource = GetComponent<AudioSource>();
-        currentSpeed = data.initialSpeed;
+        currentSpeed = data.InitialSpeed;
 
         Vector2 direction = new Vector2(Random.Range(-1, 1), -1).normalized;
         rb.velocity = direction * currentSpeed;
+        screenBottom = new Vector3(Screen.width / 2f, Screen.safeArea.yMin, Camera.main.nearClipPlane);
+        worldBottom = Camera.main.ScreenToWorldPoint(screenBottom);
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        Vector3 screenBottom = new Vector3(Screen.width / 2f, Screen.safeArea.yMin, Camera.main.nearClipPlane);
-        Vector3 worldBottom = Camera.main.ScreenToWorldPoint(screenBottom);
-
         if (transform.position.y < worldBottom.y)
         {
             OnOutOfBounds?.Invoke();
@@ -42,7 +43,7 @@ public class BallController : MonoBehaviour
         if (scorable != null)
         {
             scorable.OnHitByBall();
-            currentSpeed += data.speedIncrease;
+            currentSpeed += data.SpeedIncrease;
             rb.velocity = rb.velocity.normalized * currentSpeed;
         }
     }
