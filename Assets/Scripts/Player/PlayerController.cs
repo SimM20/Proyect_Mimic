@@ -20,13 +20,13 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 screenPos = new Vector3(Screen.width / 2, Screen.safeArea.y, Camera.main.nearClipPlane);
         Vector3 worldPos = Camera.main.ScreenToWorldPoint(screenPos);
-        transform.position = new Vector3(worldPos.x, worldPos.y + transform.localScale.x, transform.position.z);
+        transform.position = new Vector3(worldPos.x, worldPos.y + transform.localScale.y, transform.position.z);
 
-        Vector3 leftEdge = Camera.main.ScreenToWorldPoint(new Vector3(Screen.safeArea.xMin, transform.position.y, Camera.main.nearClipPlane));
-        Vector3 rightEdge = Camera.main.ScreenToWorldPoint(new Vector3(Screen.safeArea.xMax, transform.position.y, Camera.main.nearClipPlane));
+        Vector3 leftEdge = Camera.main.ScreenToWorldPoint(new Vector3(Screen.safeArea.xMin, transform.position.x, Camera.main.nearClipPlane));
+        Vector3 rightEdge = Camera.main.ScreenToWorldPoint(new Vector3(Screen.safeArea.xMax, transform.position.x, Camera.main.nearClipPlane));
 
-        minX = leftEdge.x + transform.localScale.y;
-        maxX = rightEdge.x - transform.localScale.y;
+        minX = leftEdge.x + transform.localScale.x;
+        maxX = rightEdge.x - transform.localScale.x;
     }
 
     public void ChangeLocalScale(float timeUntilChange) { StartCoroutine(RenueveScale(timeUntilChange)); }

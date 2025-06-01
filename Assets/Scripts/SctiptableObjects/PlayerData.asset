@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: PlayerData
   m_EditorClassIdentifier: 
   playerScale: {x: 1, y: 1, z: 1}
-  bigPlayerScale: {x: 1, y: 1.25, z: 1}
+  bigPlayerScale: {x: 1.25, y: 1, z: 1}

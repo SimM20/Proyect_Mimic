@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using System.Collections;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -49,6 +50,14 @@ public class GameManager : MonoBehaviour
     {
         score += 1;
         OnUpdatePoints?.Invoke(score, highScore);
+    }
+
+    public void ChangeGameplayTime(float timeUntilChange) { StartCoroutine(RenueveGameplayTime(timeUntilChange)); }
+    private IEnumerator RenueveGameplayTime(float timeUntilChange)
+    {
+        Time.timeScale = 0.5f;
+        yield return new WaitForSeconds(timeUntilChange);
+        Time.timeScale = 1f;
     }
 
     private void OnDisable() {  actualBall.OnOutOfBounds -= OnDefeat; }

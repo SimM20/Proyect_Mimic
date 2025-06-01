@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 23a3b11dc54d0ec4fb847ce1f160739d, type: 3}
-  m_Name: BigPaddlePowerUp
+  m_Name: PowerUpData
   m_EditorClassIdentifier: 
   speed: 3
   timeToWaitUntilChange: 10
