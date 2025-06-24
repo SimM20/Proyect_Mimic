@@ -16,7 +16,6 @@ public class UserManager : MonoBehaviour
         if (!string.IsNullOrEmpty(savedUsername))
         {
             SaveSystem.CurrentUsername = savedUsername;
-            Debug.Log("Cargando usuario: " + SaveSystem.CurrentUsername);
             SceneManagementUtils.LoadSceneByName("MainMenu");
         }
     }
@@ -40,13 +39,9 @@ public class UserManager : MonoBehaviour
         {
             var data = await CloudSaveService.Instance.Data.Player.LoadAsync(keys);
             if (data.ContainsKey(key))
-            {
                 warningText.text = $"User finded. LoginIn: {username}";
-            }
             else
-            {
                 warningText.text = $"New user created: {username}";
-            }
 
             SaveSystem.CurrentUsername = username;
             PlayerPrefs.SetString("username", username);
@@ -54,10 +49,6 @@ public class UserManager : MonoBehaviour
 
             SceneManagementUtils.LoadSceneByName("MainMenu");
         }
-        catch (Exception ex)
-        {
-            Debug.LogError($"Error verifying user in cloud service: {ex.Message}");
-            warningText.text = "Error connecting to the cloud";
-        }
+        catch (Exception) { warningText.text = "Error connecting to the cloud"; }
     }
 }

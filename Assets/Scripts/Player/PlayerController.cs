@@ -18,15 +18,15 @@ public class PlayerController : MonoBehaviour
 
     private void SetPosition()
     {
-        Vector3 screenPos = new Vector3(Screen.width / 2, Screen.safeArea.y, Camera.main.nearClipPlane);
-        Vector3 worldPos = Camera.main.ScreenToWorldPoint(screenPos);
-        transform.position = new Vector3(worldPos.x, worldPos.y + transform.localScale.y, transform.position.z);
+        float zDist = Mathf.Abs(Camera.main.transform.position.z - transform.position.z);
 
-        Vector3 leftEdge = Camera.main.ScreenToWorldPoint(new Vector3(Screen.safeArea.xMin, transform.position.x, Camera.main.nearClipPlane));
-        Vector3 rightEdge = Camera.main.ScreenToWorldPoint(new Vector3(Screen.safeArea.xMax, transform.position.x, Camera.main.nearClipPlane));
+        Vector3 leftEdge = Camera.main.ScreenToWorldPoint(new Vector3(Screen.safeArea.xMin, 0, zDist));
+        Vector3 rightEdge = Camera.main.ScreenToWorldPoint(new Vector3(Screen.safeArea.xMax, 0, zDist));
 
-        minX = leftEdge.x + transform.localScale.x;
-        maxX = rightEdge.x - transform.localScale.x;
+        float halfWidth = GetComponent<SpriteRenderer>().bounds.size.x / 2f;
+
+        minX = leftEdge.x + halfWidth;
+        maxX = rightEdge.x - halfWidth;
     }
 
     public void ChangeLocalScale(float timeUntilChange) { StartCoroutine(RenueveScale(timeUntilChange)); }
