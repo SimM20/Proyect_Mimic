@@ -41,11 +41,11 @@ public class UserManager : MonoBehaviour
             var data = await CloudSaveService.Instance.Data.Player.LoadAsync(keys);
             if (data.ContainsKey(key))
             {
-                warningText.text = $"Usuario encontrado. Logeado como: {username}";
+                warningText.text = $"User finded. LoginIn: {username}";
             }
             else
             {
-                warningText.text = $"Nuevo usuario creado: {username}";
+                warningText.text = $"New user created: {username}";
             }
 
             SaveSystem.CurrentUsername = username;
@@ -56,8 +56,8 @@ public class UserManager : MonoBehaviour
         }
         catch (Exception ex)
         {
-            Debug.LogError($"Error verificando usuario en la nube: {ex.Message}");
-            warningText.text = "Error conectando con la nube";
+            Debug.LogError($"Error verifying user in cloud service: {ex.Message}");
+            warningText.text = "Error connecting to the cloud";
         }
     }
 }

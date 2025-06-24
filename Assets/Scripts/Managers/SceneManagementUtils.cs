@@ -43,7 +43,6 @@ public static class SceneManagementUtils
             if (asyncLoad.progress >= 0.9f)
             {
                 slider.value = 1f;
-                //yield return new WaitForSeconds(0.5f);   ---   funciona para generar un tiempo post carga, para debug esta ok
                 asyncLoad.allowSceneActivation = true;
             }
 

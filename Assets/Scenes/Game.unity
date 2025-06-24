@@ -436,7 +436,7 @@ MonoBehaviour:
   - {fileID: 1110438841960763037, guid: 5c2fa495c74d2af4aba9e49413a4c97e, type: 3}
   - {fileID: 1110438841960763037, guid: ca6ff82efc50ea245bf719e6c50d96e4, type: 3}
   scorePaddle: {fileID: 117227286}
-  spawnChance: 0.1
+  spawnChance: 0.7
 --- !u!4 &220369873
 Transform:
   m_ObjectHideFlags: 0

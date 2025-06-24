@@ -43,10 +43,7 @@ public static class SaveSystem
             CurrentUsername = PlayerPrefs.GetString("username", "default");
             isInitialized = true;
         }
-        catch (Exception ex)
-        {
-            Debug.LogError("Error inicializando Cloud Save: " + ex.Message);
-        }
+        catch (Exception) { }
     }
 
     public static void DeleteLocalData()
@@ -73,7 +70,7 @@ public static class SaveSystem
                 await CloudSaveService.Instance.Data.Player.SaveAsync(data);
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             int localScore = LoadLocal();
             if (localScore > 0)
