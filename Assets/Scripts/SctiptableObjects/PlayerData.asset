@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3fcdb2bf5fa0d34785da312e90f2d3a, type: 3}
   m_Name: PlayerData
   m_EditorClassIdentifier: 
-  playerScale: {x: 1.5, y: 1.25, z: 1}
-  bigPlayerScale: {x: 1.75, y: 1.25, z: 1}
+  playerScale: {x: 1.5, y: 1, z: 1}
+  bigPlayerScale: {x: 2, y: 1, z: 1}
