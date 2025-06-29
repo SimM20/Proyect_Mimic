@@ -24,19 +24,27 @@ public class GameManager : MonoBehaviour
         OnUpdatePoints?.Invoke(score, highScore);
     }
 
-    private void OnEnable()
+    private void OnEnable() { StartRound(); }
+
+    private void StartRound()
     {
+        if (actualBall != null) Destroy(actualBall);
         actualBall = ballSpawner.GetComponent<BallSpawner>().SpawnBall();
         actualBall.OnOutOfBounds += OnDefeat;
         TopPaddle.OnHit += UpdatePoints;
     }
 
-    public void OnDefeat() 
+    public void OnDefeat()
     {
         actualBall.OnOutOfBounds -= OnDefeat;
         TopPaddle.OnHit -= UpdatePoints;
-        SaveScoreAsync();
-        SceneManagementUtils.AsyncLoadSceneByName("Input", loadCanvasPrefab, this);
+        AdsManager.Instance.ShowAd(
+        onSuccess: () => { StartRound(); },
+        onFailure: () =>
+        {
+            SaveScoreAsync();
+            SceneManagementUtils.AsyncLoadSceneByName("Input", loadCanvasPrefab, this);
+        } );
     }
 
     private async void SaveScoreAsync() { await SaveSystem.SaveScoreAsync(score); }
