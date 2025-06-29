@@ -1,15 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using System;
+using Unity.Services.LevelPlay;
+using Mediation = com.unity3d.mediation;
+
 
 public class AdsManager : MonoBehaviour
 {
     public static AdsManager Instance;
 
-    [SerializeField] private bool testMode = false;
+    private const string appKey = "2297f6c75";
+    private const string bannerKey = "jxj4y5uja1bs02b5";
+    private const string interstitialKey = "tjaqyxu7d4abcfwt";
 
-    private AdsHandler adsHandler;
+    private BannerAd bannerAdBottom;
+    private BannerAd bannerAdTop;
+    private InterstitialAd interstitialAd;
 
     private void Awake()
     {
@@ -18,15 +22,57 @@ public class AdsManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
         Instance = this;
         DontDestroyOnLoad(gameObject);
-
-        adsHandler = new AdsHandler();
-        adsHandler.Initialize(testMode);
     }
 
-    public void ShowAd(Action onSuccess, Action onFailure = null) => adsHandler.ShowAdvertisement(onSuccess, onFailure);
-    public void ShowBanner() => adsHandler.ShowBanner();
-    public void HideBanner() => adsHandler.HideBanner();
+    private void Start() { LevelPlay.Init(appKey); }
+
+    private void OnEnable()
+    {
+        LevelPlay.OnInitSuccess += OnInitSuccess;
+        LevelPlay.OnInitFailed += OnInitFailed;
+        SceneManagementUtils._OnSceneChanged += HandleBannerBehaviour;
+    }
+
+    private void OnDisable()
+    {
+        LevelPlay.OnInitSuccess -= OnInitSuccess;
+        LevelPlay.OnInitFailed -= OnInitFailed;
+        SceneManagementUtils._OnSceneChanged -= HandleBannerBehaviour;
+    }
+
+    //private void OnApplicationPause(bool pause) { IronSource.Agent.onApplicationPause(pause); }
+
+
+    private void OnInitSuccess(LevelPlayConfiguration config)
+    {
+        bannerAdTop = new BannerAd(bannerKey, Mediation.LevelPlayAdSize.CreateAdaptiveAdSize(), Mediation.LevelPlayBannerPosition.TopCenter);
+        bannerAdBottom = new BannerAd(bannerKey, Mediation.LevelPlayAdSize.CreateAdaptiveAdSize(), Mediation.LevelPlayBannerPosition.BottomCenter);
+        interstitialAd = new InterstitialAd(interstitialKey);
+        bannerAdTop.Load();
+        bannerAdBottom.Load();
+        interstitialAd.Load();
+    }
+
+    private void OnInitFailed(LevelPlayInitError error) { Debug.LogWarning(error); }
+
+    public void ShowInterstitialAd() { interstitialAd.Show(); }
+
+    private void HandleBannerBehaviour(string sceneName)
+    {
+        if (bannerAdBottom != null)
+        {
+            if (sceneName != "Input")
+            {
+                bannerAdBottom.Hide();
+                bannerAdTop.Hide();
+            }
+            else
+            {
+                bannerAdBottom.Load();
+                bannerAdTop.Load();
+            }
+        }
+    }
 }

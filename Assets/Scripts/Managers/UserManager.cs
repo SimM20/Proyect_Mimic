@@ -11,7 +11,7 @@ public class UserManager : MonoBehaviour
 
     private void Start()
     {
-        AdsManager.Instance.ShowBanner();
+        //AdsManager.Instance.ShowBanner();
         string savedUsername = PlayerPrefs.GetString("username", "");
         QualitySetter.Apply();
         if (!string.IsNullOrEmpty(savedUsername))
@@ -48,7 +48,7 @@ public class UserManager : MonoBehaviour
             PlayerPrefs.SetString("username", username);
             PlayerPrefs.Save();
 
-            AdsManager.Instance.HideBanner();
+            //AdsManager.Instance.HideBanner();
             SceneManagementUtils.LoadSceneByName("MainMenu");
         }
         catch (Exception) { warningText.text = "Error connecting to the cloud"; }

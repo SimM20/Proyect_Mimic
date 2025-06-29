@@ -1,18 +1,22 @@
 using System.Collections;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public static class SceneManagementUtils
 {
+    public static Action<string> _OnSceneChanged;
     public static void LoadSceneByName(string sceneName) { SceneManager.LoadScene(sceneName); }
     public static void LoadSceneByIndex(int sceneIndex) { SceneManager.LoadScene(sceneIndex); }
     public static void LoadActiveScene() { SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); }
     public static Scene GetActiveScene() { return SceneManager.GetActiveScene(); }
 
+    static SceneManagementUtils() { SceneManager.activeSceneChanged += OnSceneChanged; }
+
     public static void AsyncLoadSceneByName(string sceneName, GameObject loadingScreenPrefab, MonoBehaviour mono)
     {
-        GameObject loadingScreen = Object.Instantiate(loadingScreenPrefab);
+        GameObject loadingScreen = UnityEngine.Object.Instantiate(loadingScreenPrefab);
         Slider slider = loadingScreen.GetComponentInChildren<Slider>();
         mono.StartCoroutine(LazyLoad(sceneName, loadingScreen, slider));
     }
@@ -49,4 +53,6 @@ public static class SceneManagementUtils
             yield return null;
         }
     }
+
+    private static void OnSceneChanged(Scene oldScene, Scene newScene) {  _OnSceneChanged?.Invoke(newScene.name); }
 }
