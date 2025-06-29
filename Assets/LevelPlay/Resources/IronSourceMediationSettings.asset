@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AndroidAppKey: 2297f6c75
   IOSAppKey: 
-  EnableIronsourceSDKInitAPI: 1
+  EnableIronsourceSDKInitAPI: 0
   AddIronsourceSkadnetworkID: 1
   DeclareAD_IDPermission: 1
   EnableAdapterDebug: 0
