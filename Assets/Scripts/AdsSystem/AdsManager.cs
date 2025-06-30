@@ -2,7 +2,6 @@ using UnityEngine;
 using Unity.Services.LevelPlay;
 using Mediation = com.unity3d.mediation;
 
-
 public class AdsManager : MonoBehaviour
 {
     public static AdsManager Instance;
@@ -12,7 +11,6 @@ public class AdsManager : MonoBehaviour
     private const string interstitialKey = "tjaqyxu7d4abcfwt";
 
     private BannerAd bannerAdBottom;
-    private BannerAd bannerAdTop;
     private InterstitialAd interstitialAd;
 
     private void Awake()
@@ -47,10 +45,8 @@ public class AdsManager : MonoBehaviour
 
     private void OnInitSuccess(LevelPlayConfiguration config)
     {
-        bannerAdTop = new BannerAd(bannerKey, Mediation.LevelPlayAdSize.CreateAdaptiveAdSize(), Mediation.LevelPlayBannerPosition.TopCenter);
         bannerAdBottom = new BannerAd(bannerKey, Mediation.LevelPlayAdSize.CreateAdaptiveAdSize(), Mediation.LevelPlayBannerPosition.BottomCenter);
         interstitialAd = new InterstitialAd(interstitialKey);
-        bannerAdTop.Load();
         bannerAdBottom.Load();
         interstitialAd.Load();
     }
@@ -63,16 +59,8 @@ public class AdsManager : MonoBehaviour
     {
         if (bannerAdBottom != null)
         {
-            if (sceneName != "Input")
-            {
-                bannerAdBottom.Hide();
-                bannerAdTop.Hide();
-            }
-            else
-            {
-                bannerAdBottom.Load();
-                bannerAdTop.Load();
-            }
+            if (sceneName != "Input") bannerAdBottom.Hide();
+            else bannerAdBottom.Load();
         }
     }
 }
